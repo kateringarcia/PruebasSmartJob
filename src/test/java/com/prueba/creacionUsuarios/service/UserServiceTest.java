@@ -20,7 +20,6 @@ import com.prueba.creacionUsuarios.dto.UserRequest;
 import com.prueba.creacionUsuarios.entidad.User;
 import com.prueba.creacionUsuarios.jwt.JwtUtil;
 import com.prueba.creacionUsuarios.repositorio.UserRepository;
-import com.prueba.creacionUsuarios.util.BadRequestException;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -53,7 +52,7 @@ class UserServiceTest {
 		userRequest.setEmail("invalid-email");
 		userRequest.setPassword("Valid1Password");
 
-		BadRequestException exception = assertThrows(BadRequestException.class, () -> {
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
 			userService.registerUser(userRequest);
 		});
 
@@ -69,7 +68,7 @@ class UserServiceTest {
 
 		userService.setPattern("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)[A-Za-z\\d]{8,}$");
 		
-		BadRequestException exception = assertThrows(BadRequestException.class, () -> {
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
 			userService.registerUser(userRequest);
 		});
 
@@ -87,7 +86,7 @@ class UserServiceTest {
 		
 		when(userRepository.findByEmail(userRequest.getEmail())).thenReturn(java.util.Optional.of(new User()));
 
-		BadRequestException exception = assertThrows(BadRequestException.class, () -> {
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> {
 			userService.registerUser(userRequest);
 		});
 

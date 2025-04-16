@@ -8,7 +8,6 @@ import com.prueba.creacionUsuarios.dto.UserRequest;
 import com.prueba.creacionUsuarios.entidad.User;
 import com.prueba.creacionUsuarios.jwt.JwtUtil;
 import com.prueba.creacionUsuarios.repositorio.UserRepository;
-import com.prueba.creacionUsuarios.util.BadRequestException;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -27,15 +26,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public User registerUser(UserRequest userRequest) {
         if (!userRequest.getEmail().matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
-            throw new BadRequestException("Formato de correo inválido");
+            throw new RuntimeException("Formato de correo inválido");
         }
 
         if (!userRequest.getPassword().matches(passwordRegex)) {
-            throw new BadRequestException("Formato de contraseña inválido");
+            throw new RuntimeException("Formato de contraseña inválido");
         }
 
         if (userRepository.findByEmail(userRequest.getEmail()).isPresent()) {
-            throw new BadRequestException("El correo ya se encuentra registrado");
+        	throw new RuntimeException("El correo ya se encuentra registrado");
         }
 
         User user = new ModelMapper().map(userRequest, User.class);
